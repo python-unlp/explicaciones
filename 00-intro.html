@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/white.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="has-light-background drop" data-background-color="coral" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<style>	
+	small.point {
+		color: red;
+	}
+	.faw {
+		color: white;
+	}
+</style>
+
+<div class="" style="display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+# Presentación <!-- .element: style="color: white" -->
+</div>
+<div class="" style="font-size: 20px; color: white; position: absolute; left: 80%; top: 90%; height: 10%; width: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+<i class="fab fa-python faw"></i> Seminario Python
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Objetivos
+
+1. <i class="fab fa-python"></i> Aprender Python
+2. <i class="fab fa-gitlab"></i>  Aprender a llevar adelante un desarrollo grupal
+3. <i class="fab fa-git"></i> Aprender a usar manejador de versiones en sus proyectos
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="has-light-background drop" data-background-color="#a0c5e8" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 👥 Plantel Docente <!-- .element: style="color: white" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="" style="position: absolute; left: 10%; top: 0%; height: 100%; width: 80%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **Profesores**
+<small>
+	Claudia Banchoff y Sofia Martins.
+</small>
+
+- **JTPs**
+<small>
+	Fernando Lopez, Federico Otarán y Marco Cristofano.
+</small>
+
+- **Ayudantes**
+<small>
+	Agustín Genoves, Emilia Corrons, Facundo Díaz Gira, Lucas Di Cunzolo, Josue Carrera, Juan Vicens, Carina Girón, Lourdes Valli, Juan Fazzano, Juan Manuel Fernandez,  Simón Palacios,   Santiago Jose Lizondo Colomes e Ignacio Traberg.
+</small>
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="has-light-background drop" data-background-color="#a0c5e8" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## ☎️ Comunicación <!-- .element: style="color: white" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<img src="explicaciones/img/00-channels.png" alt="" style="object-fit: scale-down">
+
+<p>📧 python@info.unlp.edu.ar</p>
+</div>
+
+<aside class="notes"><ul>
+<li><a href="https://catedras.linti.unlp.edu.ar/course/view.php?id=1188">Moodle</a></li>
+<li><a href="https://discord.gg/7uWahAJbT3">Discord</a></li>
+<li><a href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2023">Gitlab</a></li>
+</ul>
+</aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="has-light-background drop" data-background-color="#a0c5e8" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 🗂️ Organización <!-- .element: style="color: white" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+1. 👥 [Formación de grupos](https://catedras.linti.unlp.edu.ar/mod/choicegroup/view.php?id=39397)
+1. &shy;<!-- .element: class="fragment" data-fragment-index="1" -->🗓️ [Elección de turno de consulta](https://catedras.linti.unlp.edu.ar/mod/choice/view.php?id=39674)
+	1) Jueves de 08:00hs a 10:00hs. <small>PC/Aula 1-1 (primer piso) </small>
+	3) Jueves de 16:00hs a 18:00hs. <small>Aula 8 (planta baja)</small>
+	4) Viernes de 17:00hs a 19:00hs. <small>Virtual.</small>
+
+<div class="block">
+
+<!-- .element: class="fragment fade-up" -->
+
+<div class="callout callout-color5">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-exclamation-triangle" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Atención
+
+</div>
+</div>
+<div class="callout-content">
+
+Todos los miembros del grupo deberán ir al mismo horario de consulta.
+
+</div>
+</div>
+  <!-- .element: style="font-size: 24px" -->
+</div>
+</div>
+
+<aside class="notes"><p>Intentaremos crear los grupos lo antes posible para organizar mejor la corrección.
+La formación de los grupos se hará por medio de una encuesta en cátedras.</p>
+</aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Ayudante asignado 🙋‍♀️🙋🏽‍♂️
+
+1. &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Guía
+1. &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Evalúa
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: style="small {color: red" class="has-light-background drop" data-background-color="#a0c5e8" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## 📝 Actividades <!-- .element: style="color: white" -->
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### 4 Entregas
+
+- Actividad 1 - Python + Git <small class="point">⚠️ 10 puntos</small>
+- Actividad 2 - Python + Git <small class="point">⚠️ 15 puntos</small>
+- Actividad 3 - Trabajo Integrador 1/2 <small class="point">⚠️ 35 puntos</small>
+- Actividad 4 - Trabajo integrador 2/2 <small class="point">⚠️ 40 puntos</small>
+
+<div class="block">
+
+<!-- .element: class="fragment fade-up" -->
+
+<div class="callout callout-color5">
+<div class="callout-title">
+<div class="callout-icon">
+
+<i class="fas fa-exclamation-triangle" ></i>
+
+
+</div>
+<div class="callout-title-inner">
+
+Atención
+
+</div>
+</div>
+<div class="callout-content">
+
+Las actividades 3 y 4 tienen una defensa obligatoria
+
+</div>
+</div>
+  <!-- .element: style="font-size: 24px" -->
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## ¿Qué se evalua?
+
+1. &shy;<!-- .element: class="fragment" data-fragment-index="1" -->Actividad en las consultas prácticas
+1. &shy;<!-- .element: class="fragment" data-fragment-index="2" -->Desempeño en la defensa
+1. &shy;<!-- .element: class="fragment" data-fragment-index="3" -->Participación en el código por git
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Para aprobar
+
+1. &shy;<!-- .element: class="fragment" data-fragment-index="1" -->✅ **70/100** puntos individuales
+1. &shy;<!-- .element: class="fragment" data-fragment-index="2" -->✅ **90%** del trabajo integrador completo
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## ¿Qué pasa si no llego?
+
+- &shy;<!-- .element: class="fragment" data-fragment-index="1" -->✅ Puntos de la práctica en 68 o 69.
+- &shy;<!-- .element: class="fragment" data-fragment-index="2" -->➡️ Nueva chance 🎊
+- &shy;<!-- .element: class="fragment" data-fragment-index="3" -->🧑🏽‍⚖️ Evaluaremos el desempeño en la cursada y les diremos como continuar.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="has-light-background drop" data-background-color="coral" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# 🤔❓
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Fin 👋
+</div>
+
+<aside class="notes"><p>#python #unlp #intro</p>
+</aside></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":960,"height":700,"margin":0.04,"controls":true,"progress":true,"slideNumber":false,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

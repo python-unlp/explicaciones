@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Pattern matching estructural</title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/white.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="has-light-background drop" data-background-color="coral" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<style>	
+	small.point {
+		color: red;
+	}
+	.faw {
+		color: white;
+	}
+</style>
+
+<div class="" style="display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+Pattern matching estructural <!-- .element: style="color: white" -->
+</div>
+<div class="" style="font-size: 20px; color: white; position: absolute; left: 80%; top: 90%; height: 10%; width: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+<i class="fab fa-python faw"></i> Seminario Python
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+##### Estructura del proyecto
+###### Orientado al trabajo práctico que se presentará más adelante
+
+* Componentes del proyecto:
+	* README.md
+	* requirements.txt
+	* Paquete principal
+	* Programa principal
+	* Jupyter Notebooks
+	* Datasets
+	* LICENSE
+	*  .gitignore
+	* venv ¿dónde va?
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+#### Objetivos
+
+* Python soporta una nueva estructura de control desde su versión 3.10 llamada `match`.
+* Veremos algunas formas en las que se puede usar.
+
+```python
+match expresion:
+	case pattern_1:
+		...
+	case pattern_2:
+		...
+```
+
+https://docs.python.org/3/whatsnew/3.10.html
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+##### Como reemplazo del switch o case
+##### Patterns literales
+
+```python
+direction = input("Ingrese una dirección: up, down, left, right")
+
+match direction:
+    case "up":
+        print("Go up")
+    case "down":
+        print("Go down")
+    case "left":
+        print("Go left")
+    case "right":
+        print("Go right")
+```
+
+* Definir valor literal: Un valor, por ejemplo un número o un string escrito con comillas.
+* ¿Qué pasa si el usuario ingresa un valor erróneo? 
+* Definir wildcard: `_` es un comodín o wildcard
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+#### Ahora sí patterns un poquito más elaborados
+
+ ##### Comencemos con un ejemplo
+ 
+```python
+# province, department, crop, production
+crops = [
+  ('Salta', 'Oran', 'Garbanzo', 151),
+  ('Catamarca', 'Capayan', 'Soja 1ra', 0),
+  ('Buenos Aires', 'Puan', 'Trigo candeal', 4000),
+  ('Cordoba', 'General Roca', 'Maíz', 1891147),
+  ('Santiago del Estero', 'Guasayan', 'Poroto total', 16160),
+  ('Buenos Aires', 'Lincoln', 'Soja 1ra', 185634),
+  ('Entre Rios', 'Federacion', 'Avena', 0),
+  ('Buenos Aires', 'Carmen de Areco', 'Sorgo', 4000),
+  ('Salta', 'Anta', 'Centeno', 64),
+  ('Tucuman', 'Graneros', 'Trigo total', 5802),
+  ('Buenos Aires', 'Carlos Tejedor', 'Sorgo', 11250),
+  ('Buenos Aires', 'Laprida', 'Cebada total', 32651),
+  ('Buenos Aires', 'General Belgrano', 'Sorgo', 993),
+  ('Buenos Aires', 'Tornquist', 'Trigo candeal', 3600),
+  ('Buenos Aires', 'Florentino Ameghino', 'Trigo total', 12081),
+  ('Buenos Aires', 'Rauch', 'Trigo candeal', 125),
+  ('Buenos Aires', 'General Lavalle', 'Avena', 0),
+  ('Entre Rios', 'Federal', 'Colza', 150),
+  ('Buenos Aires', 'General Belgrano', 'Alpiste', 273),
+  ('Santiago del Estero', 'Quebrachos', 'Poroto total', 4400),
+  ('Santiago del',),
+]
+```
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+##### Estructura del dato, patrones literales y patrones de captura
+
+* Queremos la producción total de todos los tipos de cultivo para "Buenos Aires", "Santiago del Estero" y "resto del país"
+  * ¿Qué estructura tiene cada dato a evaluar?
+  * ¿Qué parte de la tupla queremos usar para comparar?
+  * ¿Qué valores queremos "capturar" y cuales no nos interesan?
+* Definir patrón de secuencia abierto, `[]` o `()`: Coincide con una secuencia
+* Definir patrón de captura: Un nombre de identifcador que coincide con cualquier cosa
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+##### Patterns con OR
+
+* Queremos agrupar el total de cultivos de la región del NOA (Noroeste Argentino). Para esto deberíamos tener un case que agrupe Santiago del Estero, Tucumán, Catamarca, Jujuy, y Salta.
+
+Podemos usar el operador `|` para tener múltiples alternativas en un pattern:
+```python
+"Santiago del Estero" | "Tucuman" | "Catamarca" | "Jujuy" | "Salta"
+```
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+##### Agregar condiciones a un case: Guardas
+
+* Ahora en el caso de Buenos Aires sólo nos interesa sumar la producción de los departamentos que produzcan menos de 20.000 toneladas.
+
+```python
+match expresion:
+	case pattern_1 if expression:
+		...
+	case pattern_2:
+		...
+```
+
+* Definir guarda: Una condición adicional para hacer el match
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+#### Patterns por clase
+
+Veamos que pasa si hay un error en los datos y una de las tuplas es:
+
+```python
+('Santiago del Estero', 'Quebrachos', 'Sorgo', None),
+```
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+#### Patterns por clase
+
+* Podemos matchear por la clase
+* Podemos además matchear o capturar los argumentos con los que fue creado el objeto si éste es:
+  * builtin,
+  * namedtuple
+  * dataclass
+* Podemos matchear o capturar los atributos de la clase
+*  Verán clases más adelante...
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+##### Mapping Patterns (diccionarios)
+
+* De la misma forma que con listas y tuplas es posible hacer patrones para diccionarios:
+
+```python
+match data:
+	case {"a": a, "b": b}:
+		print(f"{a=} {b=}")
+	case {"c": c, **rest}:
+		print(f"{c=} el resto de los valores es {rest}")
+```
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+#### Ejemplo integrador
+
+```python
+mixed_data = [
+    42,
+    120,
+    "Hola mundo",
+    ["arriba", 23],
+    ["abajo"],
+    {"x": 2, "y": 24},
+    None
+]
+```
+</div></script></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":960,"height":700,"margin":0.04,"controls":true,"progress":true,"slideNumber":false,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
